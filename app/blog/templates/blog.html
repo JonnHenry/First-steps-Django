@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+    <div class="mt-3">
+        <div class="row mb-3">
+            <div class="col-3 offset-9">
+                <a href="{% url 'crear_post' %}" class="btn btn-primary float-right">
+                    Crear nuevo post
+                </a>
+            </div>
+
+        </div>
+        {% if posts %}
+            {% for post in posts %}
+                {% if forloop.first %}
+                    <div class="row">{% endif %}
+            <div class="col-4">
+                <div class="card">
+                    <img class="card-img-top" height="180" src="{{ post.imagen.url }}" alt="{{ post.titulo }}">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ post.titulo }}
+                        </h5>
+                        <h6 class="card-subtitle">
+                            Autor: {{ post.autor.username }}
+                        </h6>
+                        <p class="card-text">
+                            Categoria: {{ post.categoria.nombre }}
+                        </p>
+
+
+                        {% if post.autor == user %}
+                            <div class="card-footer">
+                                <a class="btn btn-danger" href="{% url "eliminar_post" post.id %}">
+                                    Eliminar post
+                                </a>
+                            </div>
+
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            {% if forloop.counter|divisibleby:3 %}</div>
+                <div class="row">{% endif %}
+            {% if forloop.last %}</div>{% endif %}
+
+            {% endfor %}
+
+            {% include "paginacion.html" %}
+
+
+        {% else %}
+            <div class="alert alert-danger">No hay posts</div>
+
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}
